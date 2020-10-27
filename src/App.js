@@ -40,11 +40,6 @@ class App extends React.Component {
     super();
     this.state = initialState;
   }
-  componentDidMount() {
-    fetch("http://localhost:3000")
-      .then((response) => response.json())
-      .then(console.log);
-  }
   loadUser = ({ id, name, email, entries, joined }) => {
     this.setState({
       user: {
@@ -77,7 +72,7 @@ class App extends React.Component {
   };
   onImageSubmit = () => {
     this.setState({ imgUrl: this.state.input });
-    fetch("http://localhost:3000/imageUrl", {
+    fetch("https://tranquil-temple-80934.herokuapp.com/imageUrl", {
       method: "post",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -87,7 +82,7 @@ class App extends React.Component {
       .then((response) => response.json())
       .then((response) => {
         if (response) {
-          fetch("http://localhost:3000/image", {
+          fetch("https://tranquil-temple-80934.herokuapp.com/image", {
             method: "put",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
