@@ -71,33 +71,38 @@ class App extends React.Component {
     this.setState({ box: box });
   };
   onImageSubmit = () => {
-    this.setState({ imgUrl: this.state.input });
-    fetch("https://tranquil-temple-80934.herokuapp.com/imageUrl", {
-      method: "post",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        input: this.state.input,
-      }),
-    })
-      .then((response) => response.json())
-      .then((response) => {
-        if (response) {
-          fetch("https://tranquil-temple-80934.herokuapp.com/image", {
-            method: "put",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              id: this.state.user.id,
-            }),
-          })
-            .then((response) => response.json())
-            .then((count) => {
-              this.setState(Object.assign(this.state.user, { entries: count }));
-            })
-            .catch(console.log);
-        }
-        this.displayFaceBox(this.calculateFaceLocation(response));
+    const img = this.state.input;
+    if (img !== "") {
+      this.setState({ imgUrl: img });
+      fetch("https://tranquil-temple-80934.herokuapp.com/imageUrl", {
+        method: "post",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          input: img,
+        }),
       })
-      .catch((err) => console.log(err));
+        .then((response) => response.json())
+        .then((response) => {
+          if (response) {
+            fetch("https://tranquil-temple-80934.herokuapp.com/image", {
+              method: "put",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                id: this.state.user.id,
+              }),
+            })
+              .then((response) => response.json())
+              .then((count) => {
+                this.setState(
+                  Object.assign(this.state.user, { entries: count })
+                );
+              })
+              .catch((err) => alert(err));
+          }
+          this.displayFaceBox(this.calculateFaceLocation(response));
+        })
+        .catch((err) => alert(err));
+    }
   };
   onRouteChange = (route) => {
     if (route === "signout") {
@@ -119,8 +124,6 @@ class App extends React.Component {
 
         {route === "home" ? (
           <div>
-            <Logo></Logo>
-
             <Rank
               name={this.state.user.name}
               entries={this.state.user.entries}

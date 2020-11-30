@@ -30,7 +30,7 @@ class SignIn extends React.Component {
           this.props.onRouteChange("home");
         }
       })
-      .catch(console.log);
+      .catch((err) => alert(err));
   };
   render() {
     const { onRouteChange } = this.props;
@@ -39,7 +39,7 @@ class SignIn extends React.Component {
         <main className="pa4 black-80">
           <div className="measure">
             <fieldset id="sign_up" className="ba b--transparent ph0 mh0">
-              <legend className="f1 fw6 ph0 mh0">Sign In</legend>
+              <legend className="f1 fw6 ph0 mh0">Sign in</legend>
               <div className="mt3">
                 <label className="db fw6 lh-copy f6" htmlFor="email-address">
                   Email
@@ -68,7 +68,7 @@ class SignIn extends React.Component {
             <div className="">
               <input
                 onClick={this.onSubmitSignIn}
-                className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib"
+                className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib shadow-5"
                 type="submit"
                 value="Sign in"
               />
