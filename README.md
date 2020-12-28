@@ -1,6 +1,6 @@
 
 ## Front-End:  
-This Face Recognition app uses Clarifai API to detect face in an image. 
+This full stack app uses Clarifai API to detect face in an image. 
 Live app:https://face-recognition-app2.herokuapp.com/
 ## Back-End:
 The frontend requests are handled by the Face Recognition REST API created using ExpressJs.
