@@ -4,8 +4,8 @@ class SignIn extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      signEmail: "",
-      signInPassword: "",
+      signEmail: "test@yahoo.com",
+      signInPassword: "test",
     };
   }
   onEmailChange = (event) => {
