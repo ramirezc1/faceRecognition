@@ -3,16 +3,17 @@ import "./ImageLinkForm.css";
 const ImageLinkForm = ({ onInputChange, onImageSubmit }) => {
   return (
     <div>
-      <p className="f3">{"This AI API will detect human faces in images"}</p>
       <p className="f3">
-        {"Type the URL to an image with a face and hit detect!"}
+        {"This AI API will detect human faces in images. Give it a try!"}
       </p>
+
       <div className="center">
         <div className="form center pa4 br3 shadow-5">
           <input
             className="f4 pa2 w-70 center"
             type="text"
             onChange={onInputChange}
+            placeholder="URL of Image"
           />
 
           <button
