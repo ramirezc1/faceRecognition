@@ -22,7 +22,7 @@ const particleOptions = {
 const initialState = {
   input: "",
   imgUrl: "",
-  box: {},
+  boxes: [],
   route: "signin",
   isSignedIn: false,
   user: {
@@ -52,21 +52,22 @@ class App extends React.Component {
   onInputChange = (event) => {
     this.setState({ input: event.target.value });
   };
-  calculateFaceLocation = (data) => {
-    const clarifiFace =
-      data.outputs[0].data.regions[0].region_info.bounding_box;
-    const image = document.getElementById("inputImage");
-    const width = Number(image.width);
-    const height = Number(image.height);
-    return {
-      leftCol: clarifiFace.left_col * width,
-      topRow: clarifiFace.top_row * height,
-      rightCol: width - clarifiFace.right_col * width,
-      bottomRow: height - clarifiFace.bottom_row * height,
-    };
+  calculateFaceLocations = (data) => {
+    return data.outputs[0].data.regions.map((face) => {
+      const clarifiFace = face.region_info.bounding_box;
+      const image = document.getElementById("inputImage");
+      const width = Number(image.width);
+      const height = Number(image.height);
+      return {
+        leftCol: clarifiFace.left_col * width,
+        topRow: clarifiFace.top_row * height,
+        rightCol: width - clarifiFace.right_col * width,
+        bottomRow: height - clarifiFace.bottom_row * height,
+      };
+    });
   };
-  displayFaceBox = (box) => {
-    this.setState({ box: box });
+  displayFaceBoxes = (boxes) => {
+    this.setState({ boxes: boxes });
   };
   onImageSubmit = () => {
     const img = this.state.input;
@@ -97,7 +98,7 @@ class App extends React.Component {
               })
               .catch((err) => alert(err));
           }
-          this.displayFaceBox(this.calculateFaceLocation(response));
+          this.displayFaceBoxes(this.calculateFaceLocations(response));
         })
         .catch((err) => alert(err));
     }
@@ -111,7 +112,7 @@ class App extends React.Component {
     this.setState({ route: route });
   };
   render() {
-    const { isSignedIn, imgUrl, route, box } = this.state;
+    const { isSignedIn, imgUrl, route, boxes } = this.state;
     return (
       <div className="App">
         <Particles className="particles" params={particleOptions} />
@@ -131,7 +132,7 @@ class App extends React.Component {
               onImageSubmit={this.onImageSubmit}
             ></ImageLinkForm>
 
-            <FaceRecognition imageUrl={imgUrl} box={box}></FaceRecognition>
+            <FaceRecognition imageUrl={imgUrl} boxes={boxes}></FaceRecognition>
           </div>
         ) : route === "signin" ? (
           <SignIn
