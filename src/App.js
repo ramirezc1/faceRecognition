@@ -73,7 +73,8 @@ class App extends React.Component {
     const img = this.state.input;
     if (img !== "") {
       this.setState({ imgUrl: img });
-      fetch("https://tranquil-temple-80934.herokuapp.com/imageUrl", {
+      // fetch("https://tranquil-temple-80934.herokuapp.com/imageUrl", {
+      fetch("http://localhost:3000/imageurl", {
         method: "post",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -83,7 +84,8 @@ class App extends React.Component {
         .then((response) => response.json())
         .then((response) => {
           if (response) {
-            fetch("https://tranquil-temple-80934.herokuapp.com/image", {
+            // fetch("https://tranquil-temple-80934.herokuapp.com/image", {
+            fetch("http://localhost:3000/image", {
               method: "put",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
