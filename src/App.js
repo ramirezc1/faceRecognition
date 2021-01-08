@@ -7,6 +7,8 @@ import Particles from "react-particles-js";
 import FaceRecognition from "./components/FaceRecognition/FaceRecognition";
 import SignIn from "./components/SignIn/SignIn";
 import Register from "./components/Register/Register";
+import Modal from "./components/Modal/Modal";
+import Profile from "./components/Profile/Profile";
 
 const particleOptions = {
   particles: {
@@ -23,8 +25,9 @@ const initialState = {
   input: "",
   imgUrl: "",
   boxes: [],
-  route: "signin",
-  isSignedIn: false,
+  route: "home",
+  isSignedIn: true,
+  isProfileOpen: true,
   user: {
     id: "",
     name: "",
@@ -52,6 +55,7 @@ class App extends React.Component {
   onInputChange = (event) => {
     this.setState({ input: event.target.value });
   };
+
   calculateFaceLocations = (data) => {
     return data.outputs[0].data.regions.map((face) => {
       const clarifiFace = face.region_info.bounding_box;
@@ -107,21 +111,45 @@ class App extends React.Component {
   };
   onRouteChange = (route) => {
     if (route === "signout") {
-      this.setState(initialState);
+      return this.setState(initialState);
     } else if (route === "home") {
       this.setState({ isSignedIn: true });
     }
     this.setState({ route: route });
   };
+  toggleModal = () => {
+    this.setState((prevState) => ({
+      ...prevState,
+      isProfileOpen: !prevState.isProfileOpen,
+    }));
+  };
   render() {
-    const { isSignedIn, imgUrl, route, boxes } = this.state;
+    const {
+      isSignedIn,
+      imgUrl,
+      route,
+      boxes,
+      isProfileOpen,
+      user,
+    } = this.state;
     return (
       <div className="App">
         <Particles className="particles" params={particleOptions} />
         <Navigation
           isSignedIn={isSignedIn}
           onRouteChange={this.onRouteChange}
+          toggleModal={this.toggleModal}
         ></Navigation>
+        {isProfileOpen && (
+          <Modal>
+            <Profile
+              isProfileOpen={isProfileOpen}
+              toggleModal={this.toggleModal}
+              user={user}
+              loadUser={this.loadUser}
+            ></Profile>
+          </Modal>
+        )}
 
         {route === "home" ? (
           <div>
