@@ -25,21 +25,56 @@ const initialState = {
   input: "",
   imgUrl: "",
   boxes: [],
-  route: "home",
-  isSignedIn: true,
-  isProfileOpen: true,
+  route: "signin",
+  isSignedIn: false,
+  isProfileOpen: false,
   user: {
     id: "",
     name: "",
     email: "",
     entries: 0,
     joined: "",
+    pet: "",
+    age: "",
   },
 };
 class App extends React.Component {
   constructor() {
     super();
     this.state = initialState;
+  }
+
+  componentDidMount() {
+    const token = window.sessionStorage.getItem("token");
+    if (token) {
+      fetch("http://localhost:3000/signin", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data && data.id) {
+            fetch(`http://localhost:3000/profile/${data.id}`, {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: token,
+              },
+            })
+              .then((response) => response.json())
+              .then((user) => {
+                if (user && user.email) {
+                  this.loadUser(user);
+                  this.onRouteChange("home");
+                }
+              });
+          }
+        })
+        .catch(console.log);
+    }
   }
   loadUser = ({ id, name, email, entries, joined }) => {
     this.setState({
@@ -57,21 +92,26 @@ class App extends React.Component {
   };
 
   calculateFaceLocations = (data) => {
-    return data.outputs[0].data.regions.map((face) => {
-      const clarifiFace = face.region_info.bounding_box;
-      const image = document.getElementById("inputImage");
-      const width = Number(image.width);
-      const height = Number(image.height);
-      return {
-        leftCol: clarifiFace.left_col * width,
-        topRow: clarifiFace.top_row * height,
-        rightCol: width - clarifiFace.right_col * width,
-        bottomRow: height - clarifiFace.bottom_row * height,
-      };
-    });
+    if (data && data.outputs) {
+      return data.outputs[0].data.regions.map((face) => {
+        const clarifiFace = face.region_info.bounding_box;
+        const image = document.getElementById("inputImage");
+        const width = Number(image.width);
+        const height = Number(image.height);
+
+        return {
+          leftCol: clarifiFace.left_col * width,
+          topRow: clarifiFace.top_row * height,
+          rightCol: width - clarifiFace.right_col * width,
+          bottomRow: height - clarifiFace.bottom_row * height,
+        };
+      });
+    }
   };
   displayFaceBoxes = (boxes) => {
-    this.setState({ boxes: boxes });
+    if (boxes) {
+      this.setState({ boxes: boxes });
+    }
   };
   onImageSubmit = () => {
     const img = this.state.input;
@@ -80,7 +120,10 @@ class App extends React.Component {
       // fetch("https://tranquil-temple-80934.herokuapp.com/imageUrl", {
       fetch("http://localhost:3000/imageurl", {
         method: "post",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: window.sessionStorage.getItem("token"),
+        },
         body: JSON.stringify({
           input: img,
         }),
@@ -89,9 +132,13 @@ class App extends React.Component {
         .then((response) => {
           if (response) {
             // fetch("https://tranquil-temple-80934.herokuapp.com/image", {
+
             fetch("http://localhost:3000/image", {
               method: "put",
-              headers: { "Content-Type": "application/json" },
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: window.sessionStorage.getItem("token"),
+              },
               body: JSON.stringify({
                 id: this.state.user.id,
               }),
@@ -104,6 +151,7 @@ class App extends React.Component {
               })
               .catch((err) => alert(err));
           }
+
           this.displayFaceBoxes(this.calculateFaceLocations(response));
         })
         .catch((err) => alert(err));
@@ -111,6 +159,7 @@ class App extends React.Component {
   };
   onRouteChange = (route) => {
     if (route === "signout") {
+      window.sessionStorage.removeItem("token");
       return this.setState(initialState);
     } else if (route === "home") {
       this.setState({ isSignedIn: true });

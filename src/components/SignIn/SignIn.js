@@ -14,8 +14,12 @@ class SignIn extends React.Component {
   onPasswordChange = (event) => {
     this.setState({ signInPassword: event.target.value });
   };
+  saveAuthTokenInSession = (token) => {
+    window.sessionStorage.setItem("token", token);
+  };
   onSubmitSignIn = () => {
     // fetch("https://tranquil-temple-80934.herokuapp.com/signin", {
+
     fetch("http://localhost:3000/signin", {
       method: "post",
       headers: { "Content-Type": "application/json" },
@@ -25,13 +29,14 @@ class SignIn extends React.Component {
       }),
     })
       .then((response) => response.json())
-      .then((user) => {
-        if (user.id) {
-          this.props.loadUser(user);
+      .then((data) => {
+        if (data && data.success === "true") {
+          this.saveAuthTokenInSession(data.token);
+          this.props.loadUser(data.user);
           this.props.onRouteChange("home");
         }
       })
-      .catch((err) => alert(err));
+      .catch(console.log);
   };
   render() {
     const { onRouteChange } = this.props;
