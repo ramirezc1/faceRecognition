@@ -34,7 +34,7 @@ const initialState = {
     email: "",
     entries: 0,
     joined: "",
-    pet: "",
+    favoriteUrl: "",
     age: "",
   },
 };
@@ -76,7 +76,7 @@ class App extends React.Component {
         .catch(console.log);
     }
   }
-  loadUser = ({ id, name, email, entries, joined }) => {
+  loadUser = ({ id, name, email, entries, joined, age, url }) => {
     this.setState({
       user: {
         id: id,
@@ -84,6 +84,8 @@ class App extends React.Component {
         email: email,
         entries: entries,
         joined: joined,
+        age: age,
+        favoriteUrl: url,
       },
     });
   };
