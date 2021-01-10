@@ -1,7 +1,7 @@
 
 ## Front-End:  
 This full stack app uses Clarifai API to detect multiple faces in an image. 
-Live app:https://face-recognition-app2.herokuapp.com/
+Live app:Making changes- may be not work.
 
 
 ## Back-End:
