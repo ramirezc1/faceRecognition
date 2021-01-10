@@ -22,8 +22,8 @@ class Register extends React.Component {
     window.sessionStorage.setItem("token", token);
   };
   onSubmitSignIn = () => {
-    // fetch("https://tranquil-temple-80934.herokuapp.com/register", {
-    fetch("http://localhost:3000/register", {
+    fetch("https://tranquil-temple-80934.herokuapp.com/register", {
+      // fetch("http://localhost:3000/register", {
       method: "post",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

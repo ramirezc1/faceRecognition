@@ -47,7 +47,8 @@ class App extends React.Component {
   componentDidMount() {
     const token = window.sessionStorage.getItem("token");
     if (token) {
-      fetch("http://localhost:3000/signin", {
+      fetch("https://tranquil-temple-80934.herokuapp.com/signin", {
+        //fetch("http://localhost:3000/signin", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -57,13 +58,17 @@ class App extends React.Component {
         .then((response) => response.json())
         .then((data) => {
           if (data && data.id) {
-            fetch(`http://localhost:3000/profile/${data.id}`, {
-              method: "GET",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: token,
-              },
-            })
+            fetch(
+              `https://tranquil-temple-80934.herokuapp.com/profile/${data.id}`,
+              {
+                //fetch(`http://localhost:3000/profile/${data.id}`, {
+                method: "GET",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: token,
+                },
+              }
+            )
               .then((response) => response.json())
               .then((user) => {
                 if (user && user.email) {
@@ -119,8 +124,8 @@ class App extends React.Component {
     const img = this.state.input;
     if (img !== "") {
       this.setState({ imgUrl: img });
-      // fetch("https://tranquil-temple-80934.herokuapp.com/imageUrl", {
-      fetch("http://localhost:3000/imageurl", {
+      fetch("https://tranquil-temple-80934.herokuapp.com/imageUrl", {
+        // fetch("http://localhost:3000/imageurl", {
         method: "post",
         headers: {
           "Content-Type": "application/json",
@@ -133,9 +138,8 @@ class App extends React.Component {
         .then((response) => response.json())
         .then((response) => {
           if (response) {
-            // fetch("https://tranquil-temple-80934.herokuapp.com/image", {
-
-            fetch("http://localhost:3000/image", {
+            fetch("https://tranquil-temple-80934.herokuapp.com/image", {
+              // fetch("http://localhost:3000/image", {
               method: "put",
               headers: {
                 "Content-Type": "application/json",

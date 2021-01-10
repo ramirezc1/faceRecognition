@@ -18,9 +18,8 @@ class SignIn extends React.Component {
     window.sessionStorage.setItem("token", token);
   };
   onSubmitSignIn = () => {
-    // fetch("https://tranquil-temple-80934.herokuapp.com/signin", {
-
-    fetch("http://localhost:3000/signin", {
+    fetch("https://tranquil-temple-80934.herokuapp.com/signin", {
+      // fetch("http://localhost:3000/signin", {
       method: "post",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
