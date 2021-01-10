@@ -76,7 +76,7 @@ class App extends React.Component {
         .catch(console.log);
     }
   }
-  loadUser = ({ id, name, email, entries, joined, age, url }) => {
+  loadUser = ({ id, name, email, entries, joined, age = "", url = "" }) => {
     this.setState({
       user: {
         id: id,

@@ -18,6 +18,9 @@ class Register extends React.Component {
   onNameChange = (event) => {
     this.setState({ name: event.target.value });
   };
+  saveAuthTokenInSession = (token) => {
+    window.sessionStorage.setItem("token", token);
+  };
   onSubmitSignIn = () => {
     // fetch("https://tranquil-temple-80934.herokuapp.com/register", {
     fetch("http://localhost:3000/register", {
@@ -31,9 +34,12 @@ class Register extends React.Component {
     })
       .then((response) => response.json())
       .then((user) => {
-        if (user) {
+        if (user.id && user.token) {
+          this.saveAuthTokenInSession(user.token);
           this.props.loadUser(user);
           this.props.onRouteChange("home");
+        } else {
+          alert(user);
         }
       })
       .catch((err) => alert(err));

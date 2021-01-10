@@ -4,14 +4,16 @@ import "./Profile.css";
 class Profile extends Component {
   constructor(props) {
     super(props);
+    const { name, age = "", favoriteUrl = "" } = this.props.user;
     this.state = {
-      name: this.props.user.name,
-      age: this.props.user.age,
-      url: this.props.user.favoriteUrl,
+      name: name,
+      age: age,
+      url: favoriteUrl,
     };
   }
 
   onProfileUpdate = (data) => {
+    console.log(data);
     fetch(`http://localhost:3000/profile/${this.props.user.id}`, {
       method: "post",
       headers: {
@@ -49,7 +51,7 @@ class Profile extends Component {
 
   render() {
     const { toggleModal, user } = this.props;
-    const { name, age, url } = this.state;
+    const { name, age = "", url = "" } = this.state;
     return (
       <div className="profile-modal">
         <article className="br3 ba b--black-10 mv4 w-100 w-50-m w-25-l mw6 shadow-5 center bg-white">
@@ -74,6 +76,7 @@ class Profile extends Component {
               name="user-name"
               className="pa2 ba w-100"
               placeholder={name}
+              value={name}
             ></input>
             <label className="mt2 fw6" htmlFor="user-age">
               Age:
@@ -84,6 +87,7 @@ class Profile extends Component {
               name="user-age"
               className="pa2 ba w-100"
               placeholder={age}
+              value={age}
             ></input>
             <label className="mt2 fw6" htmlFor="user-url">
               Favourite Image Url:
