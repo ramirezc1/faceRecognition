@@ -63,7 +63,7 @@ class SignIn extends React.Component {
                   Password
                 </label>
                 <input
-                  className="f4 b pa2 input-reset ba hover-bg-black hover-white w-100"
+                  className="f4 pa2 input-reset ba hover-bg-black hover-white w-100"
                   type="password"
                   name="password"
                   id="password"
