@@ -78,7 +78,7 @@ class App extends React.Component {
               });
           }
         })
-        .catch(console.log);
+        .catch((err) => alert(err));
     }
   }
   loadUser = ({ id, name, email, entries, joined, age = "", url = "" }) => {
@@ -194,6 +194,7 @@ class App extends React.Component {
           isSignedIn={isSignedIn}
           onRouteChange={this.onRouteChange}
           toggleModal={this.toggleModal}
+          route={this.state.route}
         ></Navigation>
         {isProfileOpen && (
           <Modal>
