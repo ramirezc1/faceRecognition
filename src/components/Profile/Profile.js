@@ -14,17 +14,20 @@ class Profile extends Component {
   }
 
   onProfileUpdate = (data) => {
-    console.log(data);
-    fetch(`http://localhost:3000/profile/${this.props.user.id}`, {
-      method: "post",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: window.sessionStorage.getItem("token"),
-      },
-      body: JSON.stringify({
-        formInput: data,
-      }),
-    })
+    fetch(
+      `https://tranquil-temple-80934.herokuapp.com/profile/${this.props.user.id}`,
+      {
+        //fetch(`http://localhost:3000/profile/${this.props.user.id}`, {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: window.sessionStorage.getItem("token"),
+        },
+        body: JSON.stringify({
+          formInput: data,
+        }),
+      }
+    )
       .then((resp) => {
         if (resp.status === 200 || resp.status === 304) {
           this.props.toggleModal();
